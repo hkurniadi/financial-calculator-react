@@ -15,11 +15,9 @@ class PV extends Component {
   }
   
   handleUserInput(event) {
-    console.log("Event Object", event.target);
     this.setState({
       [event.target.name]: event.target.value
     });
-    console.log(this.state[event.target.name]);
   }
 
   handleCalculation(event) {
@@ -32,7 +30,6 @@ class PV extends Component {
     this.setState({
       pv: pv
     });
-    console.log(this.state);
   }
 
   render() {
