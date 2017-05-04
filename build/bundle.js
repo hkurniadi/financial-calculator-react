@@ -26157,6 +26157,8 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -26166,22 +26168,88 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var PV = function (_Component) {
   _inherits(PV, _Component);
 
-  function PV() {
+  function PV(props) {
     _classCallCheck(this, PV);
 
-    return _possibleConstructorReturn(this, (PV.__proto__ || Object.getPrototypeOf(PV)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (PV.__proto__ || Object.getPrototypeOf(PV)).call(this, props));
+
+    _this.state = {
+      pmt: "",
+      interest: "",
+      numofpmt: "",
+      pv: ""
+    };
+
+    _this.handleCalculation = _this.handleCalculation.bind(_this);
+    _this.handleUserInput = _this.handleUserInput.bind(_this);
+    return _this;
   }
 
   _createClass(PV, [{
-    key: 'render',
+    key: "handleUserInput",
+    value: function handleUserInput(event) {
+      console.log("Event Object", event.target);
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+      console.log(this.state[event.target.name]);
+    }
+  }, {
+    key: "handleCalculation",
+    value: function handleCalculation(event) {
+      event.preventDefault();
+      var pmt = Number(this.state.pmt);
+      var interest = Number(this.state.interest) / 100;
+      var numofpmt = Number(this.state.numofpmt);
+      var pv = Number(this.state.pv);
+      pv = pmt * (1 / interest - 1 / (interest * Math.pow(1 + interest, numofpmt)));
+      this.setState({
+        pv: pv
+      });
+      console.log(this.state);
+    }
+  }, {
+    key: "render",
     value: function render() {
       return _react2.default.createElement(
-        'div',
+        "div",
         null,
         _react2.default.createElement(
-          'h1',
+          "h1",
           null,
-          'Present Value Calculator'
+          "Present Value Calculator"
+        ),
+        _react2.default.createElement(
+          "h2",
+          null,
+          "Annuity Calculator"
+        ),
+        _react2.default.createElement(
+          "form",
+          { onSubmit: this.handleCalculation },
+          _react2.default.createElement(
+            "label",
+            null,
+            "Payment Amount"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.pmt, type: "text", name: "pmt" }),
+          _react2.default.createElement(
+            "label",
+            null,
+            "Interest Rate(%)"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.interest, type: "text", name: "interest" }),
+          _react2.default.createElement(
+            "label",
+            null,
+            "Number of Payments"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.numofpmt, type: "text", name: "numofpmt" }),
+          _react2.default.createElement("input", { type: "submit", value: "Calculate PV" })
+        ),
+        _react2.default.createElement(
+          "p",
+          null,
+          "Present Value: ",
+          this.state.pv
         )
       );
     }
