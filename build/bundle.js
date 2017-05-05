@@ -26177,10 +26177,12 @@ var PV = function (_Component) {
       pmt: "",
       interest: "",
       numofpmt: "",
-      pv: ""
+      pv: "",
+      fv: ""
     };
 
-    _this.handleCalculation = _this.handleCalculation.bind(_this);
+    _this.handleAnnuityCalculation = _this.handleAnnuityCalculation.bind(_this);
+    _this.handleOnetimeCalculation = _this.handleOnetimeCalculation.bind(_this);
     _this.handleUserInput = _this.handleUserInput.bind(_this);
     return _this;
   }
@@ -26188,13 +26190,11 @@ var PV = function (_Component) {
   _createClass(PV, [{
     key: "handleUserInput",
     value: function handleUserInput(event) {
-      console.log("Event Object", event.target);
       this.setState(_defineProperty({}, event.target.name, event.target.value));
-      console.log(this.state[event.target.name]);
     }
   }, {
-    key: "handleCalculation",
-    value: function handleCalculation(event) {
+    key: "handleAnnuityCalculation",
+    value: function handleAnnuityCalculation(event) {
       event.preventDefault();
       var pmt = Number(this.state.pmt);
       var interest = Number(this.state.interest) / 100;
@@ -26204,7 +26204,19 @@ var PV = function (_Component) {
       this.setState({
         pv: pv
       });
-      console.log(this.state);
+    }
+  }, {
+    key: "handleOnetimeCalculation",
+    value: function handleOnetimeCalculation(event) {
+      event.preventDefault();
+      var interest = Number(this.state.interest) / 100;
+      var fv = Number(this.state.fv);
+      var numofperiods = Number(this.state.numofpmt);
+      var pv = Number(this.state.pv);
+      pv = fv / Math.pow(1 + interest, numofperiods);
+      this.setState({
+        pv: pv
+      });
     }
   }, {
     key: "render",
@@ -26220,11 +26232,11 @@ var PV = function (_Component) {
         _react2.default.createElement(
           "h2",
           null,
-          "Annuity Calculator"
+          "Annuity"
         ),
         _react2.default.createElement(
           "form",
-          { onSubmit: this.handleCalculation },
+          { onSubmit: this.handleAnnuityCalculation },
           _react2.default.createElement(
             "label",
             null,
@@ -26243,6 +26255,42 @@ var PV = function (_Component) {
             "Number of Payments"
           ),
           _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.numofpmt, type: "text", name: "numofpmt" }),
+          _react2.default.createElement("input", { type: "submit", value: "Calculate PV" })
+        ),
+        _react2.default.createElement(
+          "p",
+          null,
+          "Present Value: ",
+          this.state.pv
+        ),
+        _react2.default.createElement("br", null),
+        _react2.default.createElement("hr", null),
+        _react2.default.createElement(
+          "h2",
+          null,
+          "One-time PV"
+        ),
+        _react2.default.createElement(
+          "form",
+          { onSubmit: this.handleOnetimeCalculation },
+          _react2.default.createElement(
+            "label",
+            null,
+            "Future Value"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.fv, type: "text", name: "fv" }),
+          _react2.default.createElement(
+            "label",
+            null,
+            "Interest Rate(%)"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.interest, type: "text", name: "interest" }),
+          _react2.default.createElement(
+            "label",
+            null,
+            "Number of Periods"
+          ),
+          _react2.default.createElement("input", { onChange: this.handleUserInput, value: this.state.value, type: "text", name: "numofpmt" }),
           _react2.default.createElement("input", { type: "submit", value: "Calculate PV" })
         ),
         _react2.default.createElement(
